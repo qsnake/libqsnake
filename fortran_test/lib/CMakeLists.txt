@@ -1,0 +1,1 @@
+cython_add_module(wrapper_tests wrapper_tests.f90)

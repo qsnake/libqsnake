@@ -1,0 +1,8 @@
+% B3LYP optimization of water
+optimize: yes
+method: KS (xc = B3LYP)
+basis: 6-311G**
+molecule: (angstrom)
+    O    0.0000000000    -0.2864029136     0.0000000000
+    H    0.7593385353     0.3096269947     0.0000000000
+    H   -0.7593385353     0.3096269947     0.0000000000

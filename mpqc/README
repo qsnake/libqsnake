@@ -1,0 +1,13 @@
+Execute the simulations by (for example):
+
+$ mpqc water.in
+
+To compile mpqc from svn, do:
+
+svn co https://mpqc.svn.sourceforge.net/svnroot/mpqc/trunk/mpqc/
+cd mpqc
+aclocal -I lib/autoconf/
+autoconf
+./configure --prefix=$HOME/usr
+make
+make install

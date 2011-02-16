@@ -1,0 +1,12 @@
+ $contrl runtyp=optimize dfttyp=b3lyp $end
+ $basis gbasis=n31 ngauss=6 ndfunc=1 $end
+ $scf dirscf =.t. $end
+ $contrl nzvar=1 $end
+ $zmat dlc=.t. auto=.t. $end
+ $DATA
+Title
+C1
+O 8.0   0.0000000000    -0.2864029136     0.0000000000
+H 1.0   0.7593385353     0.3096269947     0.0000000000
+H 1.0  -0.7593385353     0.3096269947     0.0000000000
+$END
