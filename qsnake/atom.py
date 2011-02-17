@@ -207,6 +207,7 @@ def solve_hydrogen_like_atom(Z, mesh_params, solver_params):
 
     # Elk value:
     c  = 137.035999679
+    solver_params["c"] = c
 
     # Polynomial degree for predictor-corrector:
     np = 4
