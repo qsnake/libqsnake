@@ -3,6 +3,7 @@ from numpy import array, dot, cross
 from numpy.linalg import norm
 from data import symbol2number, number2symbol, number2name, number2color
 from mesh import mesh_log
+import numpy
 
 def R_x(alpha):
     return array([
@@ -160,6 +161,22 @@ def solve_radial_eigenproblem(n, l, r, u, relat=0, params=None):
         from dftatom.rdirac import solve_radial_eigenproblem
         E, R = solve_radial_eigenproblem(n, l, E_init, E_delta, eps,
                 u, r, Z, relat)
+        return E, R
+    elif solver == "elk":
+        from elk.pyelk import rdirac
+        if relat == 2:
+            k = l + 1
+        elif relat == 3:
+            k = l
+        else:
+            raise ValueError("relat must be 2 or 3")
+        #E_init = params.get("E_init", -3000)
+        E_init = params.get("E_init", -1)
+        c = params.get("c", 137.035999037)
+        # Polynomial degree for predictor-corrector:
+        np = params.get("np", 4)
+        E, g, f = rdirac(c, n, l, k, np, r, u, E_init)
+        R = numpy.sqrt(g**2 + f**2)
         return E, R
     else:
         raise Exception("Uknown solver")

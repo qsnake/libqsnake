@@ -8,5 +8,6 @@ mesh_params = {
         "N": 30000,
         }
 solver_params = {
+        "solver": "elk",
         }
 solve_hydrogen_like_atom(Z, mesh_params, solver_params)
