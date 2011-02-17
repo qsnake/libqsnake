@@ -4,7 +4,7 @@ from scipy.optimize import fmin
 from sympy.physics.hydrogen import E_nl_dirac
 
 from elk.pyelk import rdirac
-from elk.mesh import mesh_log, get_params_log
+from elk.mesh import mesh_log, get_params_log, mesh_elk_direct
 
 def fmin_pos(f, x0):
 
@@ -17,15 +17,25 @@ def fmin_pos(f, x0):
     a0 = log(x0-1)
     return fmin(_f, a0)
 
+# orig:
+sprmin = 0.220863E-06
+rmt = 2.0000
+sprmax = 42.8183
+nrmt = 700
+
+# new:
+sprmin = 1e-10
+nrmt = 3000
+
+r0 = mesh_elk_direct(sprmin, rmt, sprmax, nrmt)
+
 
 Z = 82
-t1 =  1.436781609195402E-003
-t2=   16.0188704177142
-r_min=  2.208630000000000E-007
-spnr=         830
-n = arange(spnr)
-_r = r_min * exp(n * t1 * t2)
-r_min, r_max, a, N = get_params_log(_r)
+r_min, r_max, a, N = get_params_log(r0)
+
+print r_min, r_max, a, N
+N = 5382
+a = 7928200510.27
 
 def f(a):
     print "Evaluating a =", a
@@ -35,6 +45,7 @@ def f(a):
     print "a =", a
     print "N =", N
     r = mesh_log(r_min, r_max, a, N)
+    print r
 
 
     # Potential:
@@ -53,7 +64,7 @@ def f(a):
     tot_error = -1
     # (n, l):
     # either k == l, or k == l + 1:
-    for n in range(1, 6):
+    for n in range(1, 7):
         for l in range(0, n):
             k_list = []
             if l > 0:
@@ -74,4 +85,7 @@ def f(a):
 
     return tot_error
 
-print fmin_pos(f, 12555158.4315)
+
+#print fmin_pos(f, a_orig)
+print f(a)
+#print f(a_min)
