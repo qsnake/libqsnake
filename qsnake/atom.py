@@ -164,7 +164,7 @@ def solve_radial_eigenproblem(n, l, r, u, relat=0, params=None):
     else:
         raise Exception("Uknown solver")
 
-def solve_hydrogen_like_atom(Z, mesh_params, solver_params)
+def solve_hydrogen_like_atom(Z, mesh_params, solver_params):
     r_min = mesh_params["r_min"]
     r_max = mesh_params["r_max"]
     a = mesh_params["a"]
