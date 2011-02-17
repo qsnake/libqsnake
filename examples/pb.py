@@ -1,13 +1,22 @@
 from qsnake.atom import solve_hydrogen_like_atom
 
-Z = 82
-mesh_params = {
+solve_hydrogen_like_atom(82, {
         "r_min": 1e-10,
         "r_max": 42.4813927645,
         "a": 7928200510.27,
         "N": 5382,
+        }, {
+        "solver": "dftatom",
         }
-solver_params = {
+    )
+stop
+
+solve_hydrogen_like_atom(82, {
+        "r_min": 1e-10,
+        "r_max": 42.4813927645,
+        "a": 7928200510.27,
+        "N": 5382,
+        }, {
         "solver": "elk",
         }
-solve_hydrogen_like_atom(Z, mesh_params, solver_params)
+    )

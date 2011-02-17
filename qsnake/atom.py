@@ -152,9 +152,12 @@ def solve_radial_eigenproblem(n, l, r, u, relat=0, params=None):
         params = {}
     solver = params.get("solver", "dftatom")
     if solver == "dftatom":
-        if "Z" not in params:
-            raise Exception("Specify Z in params")
-        Z = params["Z"]
+        if "Z" in params:
+            Z = params["Z"]
+        else:
+            # Estimate Z by assuming a coulombic potential u = -Z/r near the
+            # origin:
+            Z = -u[0] * r[0]
         E_init = params.get("E_init", -3000)
         E_delta = params.get("E_delta", 2000)
         eps = params.get("eps", 1e-9)
@@ -195,47 +198,32 @@ def solve_hydrogen_like_atom(Z, mesh_params, solver_params):
     r = mesh_log(r_min, r_max, a, N)
     print r
 
+    c = solver_params.get("c", 137.035999037)
+    solver_params["c"] = c
     solver_params["Z"] = Z
 
 
     # Potential:
     vr = -Z/r
 
-    # Speed of light taken from:
-    # http://arxiv.org/abs/1012.3627
-    #c = 137.035999037
-
-    # Elk value:
-    c  = 137.035999679
-    solver_params["c"] = c
-
-    # Polynomial degree for predictor-corrector:
-    np = 4
-
     tot_error = -1
     # (n, l):
     # either k == l, or k == l + 1:
     for n in range(1, 7):
         for l in range(0, n):
-            k_list = []
+            relat_list = [2]
             if l > 0:
-                k_list.append(l)
-            k_list.append(l+1)
+                relat_list.append(3)
 
-            for k in k_list:
-                # Initial guess:
-                E = -1.0
-                spin_up = (k == l+1)
-                if spin_up:
-                    relat = 2
-                else:
-                    relat = 3
+            for relat in relat_list:
+                spin_up = (relat == 2)
                 E, R = solve_radial_eigenproblem(n, l, r, vr, relat,
                         solver_params)
                 E_exact = E_nl_dirac(n, l, spin_up=spin_up, Z=Z, c=c)
                 delta = abs(E-E_exact)
                 if delta > tot_error:
                     tot_error = delta
+                k = int(spin_up)
                 print ("(n=%d, l=%d, k=%d): E_calc=%12.6f    E_xact=%12.6f    " + \
                                                         "delta=%9.2e") % (n, l, k, E, E_exact, delta)
     print "tot_error = ", tot_error
