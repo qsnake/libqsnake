@@ -154,8 +154,8 @@ def solve_radial_eigenproblem(n, l, r, u, relat=0, params=None):
         if "Z" not in params:
             raise Exception("Specify Z in params")
         Z = params["Z"]
-        E_init = params.get("E_init", -500)
-        E_delta = params.get("E_delta", 1000)
+        E_init = params.get("E_init", -3000)
+        E_delta = params.get("E_delta", 2000)
         eps = params.get("eps", 1e-10)
         from dftatom.rdirac import solve_radial_eigenproblem
         E, R = solve_radial_eigenproblem(n, l, E_init, E_delta, eps,
