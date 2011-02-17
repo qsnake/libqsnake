@@ -165,6 +165,7 @@ def solve_radial_eigenproblem(n, l, r, u, relat=0, params=None):
         raise Exception("Uknown solver")
 
 def solve_hydrogen_like_atom(Z, mesh_params, solver_params):
+    from sympy.physics.hydrogen import E_nl_dirac
     r_min = mesh_params["r_min"]
     r_max = mesh_params["r_max"]
     a = mesh_params["a"]
