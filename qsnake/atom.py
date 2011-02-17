@@ -2,6 +2,7 @@ from math import sin, cos, pi
 from numpy import array, dot, cross
 from numpy.linalg import norm
 from data import symbol2number, number2symbol, number2name, number2color
+from mesh import mesh_log
 
 def R_x(alpha):
     return array([
@@ -138,7 +139,9 @@ def solve_radial_eigenproblem(n, l, r, u, relat=0, params=None):
                         (Emin, Emax), where
                             E_min = E_init - E_delta
                             E_max = E_init + E_delta
-                eps ... accuracy for |Emax - Emin| < eps
+                eps ... accuracy for |Emax - Emin| < eps, default 1e-10
+                c ... speed of light in atomic units (default c = 137.035999037,
+                        from http://arxiv.org/abs/1012.3627)
 
 
     Returns (E, R), where E is the energy, and R(r) is the radial wave
@@ -160,3 +163,62 @@ def solve_radial_eigenproblem(n, l, r, u, relat=0, params=None):
         return E, R
     else:
         raise Exception("Uknown solver")
+
+def solve_hydrogen_like_atom(Z, mesh_params, solver_params)
+    r_min = mesh_params["r_min"]
+    r_max = mesh_params["r_max"]
+    a = mesh_params["a"]
+    N = mesh_params["N"]
+    print "Mesh parameters:"
+    print "r_min =", r_min
+    print "r_max =", r_max
+    print "a =", a
+    print "N =", N
+    r = mesh_log(r_min, r_max, a, N)
+    print r
+
+    solver_params["Z"] = Z
+
+
+    # Potential:
+    vr = -Z/r
+
+    # Speed of light taken from:
+    # http://arxiv.org/abs/1012.3627
+    #c = 137.035999037
+
+    # Elk value:
+    c  = 137.035999679
+
+    # Polynomial degree for predictor-corrector:
+    np = 4
+
+    tot_error = -1
+    # (n, l):
+    # either k == l, or k == l + 1:
+    for n in range(1, 7):
+        for l in range(0, n):
+            k_list = []
+            if l > 0:
+                k_list.append(l)
+            k_list.append(l+1)
+
+            for k in k_list:
+                # Initial guess:
+                E = -1.0
+                spin_up = (k == l+1)
+                if spin_up:
+                    relat = 2
+                else:
+                    relat = 3
+                E, R = solve_radial_eigenproblem(n, l, r, vr, relat,
+                        solver_params)
+                E_exact = E_nl_dirac(n, l, spin_up=spin_up, Z=Z, c=c)
+                delta = abs(E-E_exact)
+                if delta > tot_error:
+                    tot_error = delta
+                print ("(n=%d, l=%d, k=%d): E_calc=%12.6f    E_xact=%12.6f    " + \
+                                                        "delta=%9.2e") % (n, l, k, E, E_exact, delta)
+    print "tot_error = ", tot_error
+
+    return tot_error
