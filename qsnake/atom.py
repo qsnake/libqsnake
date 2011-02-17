@@ -117,3 +117,46 @@ class Atom(object):
                 resolution=20,
                 color=color,
                 scale_mode="none")
+
+def solve_radial_eigenproblem(n, l, r, u, relat=0, params=None):
+    """
+    Solves the radial Schroedinger (Dirac) eigenproblem.
+
+    Input::
+
+        n, l ..... quantum numbers
+        r ........ radial mesh (NumPy array)
+        u ........ Potential on the radial mesh (for example -Z/r)
+        relat .... 0 solves Schroedinger equation
+                   2 solves Dirac equation, spin up
+                   3 solves Dirac equation, spin down
+        params ... optional dictionary with solver specific parameters (not all
+                    parameters apply for each solver):
+                solver ... type of solver (dftatom, elk)
+                Z ... atomic number Z in the potential -Z/r
+                E_init, E_delta ... energy is sought in the interval
+                        (Emin, Emax), where
+                            E_min = E_init - E_delta
+                            E_max = E_init + E_delta
+                eps ... accuracy for |Emax - Emin| < eps
+
+
+    Returns (E, R), where E is the energy, and R(r) is the radial wave
+    function (normalized as \int R(r)**2 * r**2 \d r = 1)
+    """
+    if params is None:
+        params = {}
+    solver = params.get("solver", "dftatom")
+    if solver == "dftatom":
+        if "Z" not in params:
+            raise Exception("Specify Z in params")
+        Z = params["Z"]
+        E_init = params.get("E_init", -500)
+        E_delta = params.get("E_delta", 1000)
+        eps = params.get("eps", 1e-10)
+        from dftatom.rdirac import solve_radial_eigenproblem
+        E, R = solve_radial_eigenproblem(n, l, E_init, E_delta, eps,
+                u, r, Z, relat)
+        return E, R
+    else:
+        raise Exception("Uknown solver")
