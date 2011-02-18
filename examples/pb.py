@@ -2,7 +2,7 @@ from qsnake.atom import solve_hydrogen_like_atom, ConvergeError
 from qsnake.mesh import n_minimize
 from sympy import TableForm
 from numpy import arange
-from json import dump
+from json import dump, encoder
 
 def optimize(r_min=1e-6, r_max=50, N=700, solver="elk"):
     def f(a):
@@ -11,10 +11,10 @@ def optimize(r_min=1e-6, r_max=50, N=700, solver="elk"):
         N = params[2]
         try:
             r = solve_hydrogen_like_atom(82, {
-                    "r_min": 1e-6,
-                    "r_max": 42.4813927645,
+                    "r_min": r_min,
+                    "r_max": r_max,
                     "a": a,
-                    "N": 700,
+                    "N": N,
                 }, {
                     "solver": solver,
                 }, verbose=False)
@@ -62,10 +62,10 @@ def optimize_mesh(r_min=1e-8):
         }
     return result
 
-a = 1e-10
+a = 1e-7
 b = 1e-6
 results = []
-r_min_list = arange(a, b, (b-a)/2)
+r_min_list = arange(a, b, (b-a)/20.)
 print "Optimizing for:"
 print r_min_list
 for r_min in r_min_list:
@@ -75,4 +75,5 @@ for r_min in r_min_list:
     print "Done calculating:", r_min
 
 f = open("results.json", "w")
+encoder.FLOAT_REPR = lambda o: format(o, '.15e')
 dump(results, f)
