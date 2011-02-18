@@ -40,14 +40,14 @@ def optimize(r_min=1e-6, r_max=50, N=700, solver="elk"):
             print "Didn't converge at a=", e.a
             a_min = e.a
     print
-    return a_opt, error
+    return a_opt, error, a_min, a_max
 
 def optimize_mesh(r_min=1e-8):
     r_max = 50
     N = 700
     solver = "dftatom"
 
-    a, error = optimize(r_min=r_min, r_max=50, N=700, solver=solver)
+    a, error, a_min, a_max = optimize(r_min=r_min, r_max=50, N=700, solver=solver)
     print "'a' is optimized:"
     print TableForm([[r_min], [r_max], [a], [N]],
                 headings=(("r_min", "r_max", "a", "N"), ("Mesh parameters",)))
@@ -59,13 +59,15 @@ def optimize_mesh(r_min=1e-8):
             "N": N,
             "solver": solver,
             "error": error,
+            "a_min": a_min,
+            "a_max": a_max,
         }
     return result
 
-a = 1e-7
+a = 1e-10
 b = 1e-6
 results = []
-r_min_list = arange(a, b, (b-a)/20.)
+r_min_list = arange(b, a, -(b-a)/20.)
 print "Optimizing for:"
 print r_min_list
 for r_min in r_min_list:
