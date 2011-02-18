@@ -1,5 +1,6 @@
 from qsnake.atom import solve_hydrogen_like_atom, ConvergeError
 from qsnake.mesh import n_minimize
+from sympy import TableForm
 
 def optimize(r_min=1e-6, r_max=50, N=700, solver="elk"):
     def f(a):
@@ -21,7 +22,7 @@ def optimize(r_min=1e-6, r_max=50, N=700, solver="elk"):
         return r
 
     a_min = 1
-    b_max = 1e8
+    a_max = 1e8
     params = [r_min, r_max, N]
     done = False
     while not done:
@@ -33,6 +34,19 @@ def optimize(r_min=1e-6, r_max=50, N=700, solver="elk"):
         except ConvergeError, e:
             print "Didn't converge at a=", e.a
             a_min = e.a
+    print
     return a_opt
 
-print optimize()
+def optimize_mesh():
+    r_min = 1e-8
+    r_max = 50
+    N = 700
+    solver = "elk"
+
+    a, error = optimize(r_min=1e-6, r_max=50, N=700, solver="elk")
+    print "'a' is optimized:"
+    print TableForm([[r_min], [r_max], [a], [N]],
+                headings=(("r_min", "r_max", "a", "N"), ("Mesh parameters",)))
+    print "total error:", error
+
+optimize_mesh()
