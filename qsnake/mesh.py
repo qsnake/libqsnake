@@ -300,11 +300,19 @@ def optimize_parameter(f, t):
     a0, a_min, a_max = t
     assert a_max == None
 
+    _minimum = [None]
+
     def _f(a):
         assert len(a) == 1
         a = a[0]
         a = a_min + math.exp(a)
-        return f(a)
+        r = f(a)
+        if _minimum[0] is None:
+            _minimum[0] = [a, r]
+        elif r < _minimum[0][1]:
+            _minimum[0] = [a, r]
+            print "Found new minimum: f(%f) = %e" % (a, r)
+        return r
 
     a0 = math.log(a0-a_min)
     return fmin(_f, a0)
