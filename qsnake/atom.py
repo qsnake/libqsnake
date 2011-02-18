@@ -160,7 +160,7 @@ def solve_radial_eigenproblem(n, l, r, u, relat=0, params=None):
             Z = params["Z"]
         else:
             # Disable the fragile estimation of Z below for now:
-            raise NotImplementedError()
+            raise NotImplementedError("Z not specified. You can enable automatic determination of Z in qsnake/atom.py.")
             # Estimate Z by assuming a coulombic potential u = -Z/r near the
             # origin:
             Z = -u[0] * r[0]
