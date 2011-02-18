@@ -194,19 +194,19 @@ def solve_radial_eigenproblem(n, l, r, u, relat=0, params=None):
     else:
         raise Exception("Uknown solver")
 
-def solve_hydrogen_like_atom(Z, mesh_params, solver_params):
+def solve_hydrogen_like_atom(Z, mesh_params, solver_params, verbose=False):
     from sympy.physics.hydrogen import E_nl_dirac
+    from sympy import TableForm
     r_min = mesh_params["r_min"]
     r_max = mesh_params["r_max"]
     a = mesh_params["a"]
     N = mesh_params["N"]
-    print "Mesh parameters:"
-    print "r_min =", r_min
-    print "r_max =", r_max
-    print "a =", a
-    print "N =", N
     r = mesh_log(r_min, r_max, a, N)
-    print r
+    if verbose:
+        print "Mesh parameters:"
+        print TableForm([[r_min], [r_max], [a], [N]],
+                headings=(("r_min", "r_max", "a", "N"), ("Mesh parameters",)))
+        print r
 
     c = solver_params.get("c", 137.035999037)
     solver_params["c"] = c
@@ -217,6 +217,7 @@ def solve_hydrogen_like_atom(Z, mesh_params, solver_params):
     vr = -Z/r
 
     tot_error = -1
+    data = []
     # (n, l):
     # either k == l, or k == l + 1:
     for n in range(1, 7):
@@ -231,15 +232,18 @@ def solve_hydrogen_like_atom(Z, mesh_params, solver_params):
                     E, R = solve_radial_eigenproblem(n, l, r, vr, relat,
                             solver_params)
                 except ConvergeError:
-                    print "Radial solver didn't converge"
+                    if verbose:
+                        print "Radial solver didn't converge"
                     return 1e6
                 E_exact = E_nl_dirac(n, l, spin_up=spin_up, Z=Z, c=c).n()
                 delta = abs(E-E_exact)
                 if delta > tot_error:
                     tot_error = delta
                 k = int(spin_up)
-                print ("(n=%d, l=%d, k=%d): E_calc=%12.6f    E_xact=%12.6f    " + \
-                                                        "delta=%9.2e") % (n, l, k, E, E_exact, delta)
-    print "tot_error = ", tot_error
-
+                data.append([n, l, k,
+                    "%.6f" % E, "%.6f" % E_exact, "%.2e" % delta])
+    t = TableForm(data, alignment="right",
+            headings=(None, ("n", "l", "k", "E_calc", "E_exact", "delta")))
+    if verbose:
+        print t
     return tot_error

@@ -309,9 +309,10 @@ def optimize_parameter(f, t):
         r = f(a)
         if _minimum[0] is None:
             _minimum[0] = [a, r]
+            print "Minimum: f(%f) = %e" % (a, r)
         elif r < _minimum[0][1]:
             _minimum[0] = [a, r]
-            print "Found new minimum: f(%f) = %e" % (a, r)
+            print "Minimum: f(%f) = %e" % (a, r)
         return r
 
     a0 = math.log(a0-a_min)
