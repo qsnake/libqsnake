@@ -23,19 +23,22 @@ def optimize(r_min=1e-6, r_max=50, N=700, solver="elk"):
 
     a_min = 1
     a_max = 1e8
+    # temporary:
+    a_min = 3982631.666582 - 1
+    a_max = 3982631.666582 + 1
     params = [r_min, r_max, N]
     done = False
     while not done:
         try:
             print "Minimizing on (%f, %f)" % (a_min, a_max)
-            a_opt = n_minimize(f, ((a_min + a_max) / 2., a_min, a_max),
+            a_opt, error = n_minimize(f, ((a_min + a_max) / 2., a_min, a_max),
                     method="brent")
             done = True
         except ConvergeError, e:
             print "Didn't converge at a=", e.a
             a_min = e.a
     print
-    return a_opt
+    return a_opt, error
 
 def optimize_mesh():
     r_min = 1e-8

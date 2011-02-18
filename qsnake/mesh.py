@@ -326,15 +326,15 @@ def n_minimize(f, t, method="automatic"):
         assert a_max is None
         a0 = math.log(a0 - a_min)
         r = fmin(_f, a0)
-        return _minimum
+        return _minimum[0]
     elif method == "l-bfgs-b":
         r = fmin_l_bfgs_b(_f, [a0], bounds=[(a_min, a_max)],
                 approx_grad=True)
-        return _minimum
+        return _minimum[0]
     elif method == "brent":
         if a_max is None:
             a_max = 1e12
         r = fminbound(_f, a_min, a_max)
-        return _minimum
+        return _minimum[0]
     else:
         raise ValueError("Unknown method")
