@@ -1,26 +1,38 @@
-from qsnake.atom import solve_hydrogen_like_atom
+from qsnake.atom import solve_hydrogen_like_atom, ConvergeError
 from qsnake.mesh import n_minimize
 
-def f(a):
-    r = solve_hydrogen_like_atom(82, {
-            "r_min": 1e-6,
-            "r_max": 42.4813927645,
-            "a": a,
-            "N": 2000,
-        }, {
-            "solver": "dftatom",
-        }, verbose=False)
-    return r
-#n_minimize(f, (1620246.055619, 1, None), method="simplex")
-n_minimize(f, (1618205.360366, 1, 2000000), method="brent")
-stop
+def optimize(r_min=1e-6, r_max=50, N=700, solver="elk"):
+    def f(a):
+        r_min = params[0]
+        r_max = params[1]
+        N = params[2]
+        try:
+            r = solve_hydrogen_like_atom(82, {
+                    "r_min": 1e-6,
+                    "r_max": 42.4813927645,
+                    "a": a,
+                    "N": 700,
+                }, {
+                    "solver": solver,
+                }, verbose=False)
+        except ConvergeError, e:
+            e.a = a
+            raise e
+        return r
 
-solve_hydrogen_like_atom(82, {
-        "r_min": 1e-10,
-        "r_max": 42.4813927645,
-        "a": 7928200510.27,
-        "N": 5382,
-        }, {
-        "solver": "elk",
-        }
-    )
+    a_min = 1
+    b_max = 1e8
+    params = [r_min, r_max, N]
+    done = False
+    while not done:
+        try:
+            print "Minimizing on (%f, %f)" % (a_min, a_max)
+            a_opt = n_minimize(f, ((a_min + a_max) / 2., a_min, a_max),
+                    method="brent")
+            done = True
+        except ConvergeError, e:
+            print "Didn't converge at a=", e.a
+            a_min = e.a
+    return a_opt
+
+print optimize()
