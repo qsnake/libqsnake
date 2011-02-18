@@ -320,7 +320,7 @@ def n_minimize(f, t, method="automatic"):
         elif r < _minimum[0][1]:
             _minimum[0] = [a, r]
             print "\nMinimum: f(%f) = %e" % (a, r)
-        return float(r)
+        return r
 
     if method == "simplex":
         assert a_max is None
