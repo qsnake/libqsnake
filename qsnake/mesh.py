@@ -47,9 +47,11 @@ functions is called):
 
 """
 
+import sys
+import math
+
 from numpy import array, arange
 import numpy
-import math
 
 def ref2phys(r, r_min, r_max):
     return r * (r_max - r_min) + r_min
@@ -306,13 +308,15 @@ def optimize_parameter(f, t):
         assert len(a) == 1
         a = a[0]
         a = a_min + math.exp(a)
+        sys.stdout.write(".")
+        sys.stdout.flush()
         r = f(a)
         if _minimum[0] is None:
             _minimum[0] = [a, r]
-            print "Minimum: f(%f) = %e" % (a, r)
+            print "\nMinimum: f(%f) = %e" % (a, r)
         elif r < _minimum[0][1]:
             _minimum[0] = [a, r]
-            print "Minimum: f(%f) = %e" % (a, r)
+            print "\nMinimum: f(%f) = %e" % (a, r)
         return r
 
     a0 = math.log(a0-a_min)
