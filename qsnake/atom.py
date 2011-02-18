@@ -5,6 +5,9 @@ from data import symbol2number, number2symbol, number2name, number2color
 from mesh import mesh_log
 import numpy
 
+class ConvergeError(Exception):
+    pass
+
 def R_x(alpha):
     return array([
         [1, 0, 0],
@@ -151,6 +154,7 @@ def solve_radial_eigenproblem(n, l, r, u, relat=0, params=None):
     if params is None:
         params = {}
     solver = params.get("solver", "dftatom")
+    c = params.get("c", 137.035999037)
     if solver == "dftatom":
         if "Z" in params:
             Z = params["Z"]
@@ -163,9 +167,13 @@ def solve_radial_eigenproblem(n, l, r, u, relat=0, params=None):
         E_init = params.get("E_init", -3000)
         E_delta = params.get("E_delta", 2000)
         eps = params.get("eps", 1e-9)
-        from dftatom.rdirac import solve_radial_eigenproblem
-        E, R = solve_radial_eigenproblem(n, l, E_init, E_delta, eps,
-                u, r, Z, relat)
+        from dftatom.rdirac import (solve_radial_eigenproblem,
+                ConvergeError as dftatom_ConvergeError)
+        try:
+            E, R = solve_radial_eigenproblem(c, n, l, E_init, E_delta, eps,
+                    u, r, Z, relat)
+        except dftatom_ConvergeError, e:
+            raise ConvergeError(str(e))
         return E, R
     elif solver == "elk":
         from elk.pyelk import rdirac
@@ -177,10 +185,11 @@ def solve_radial_eigenproblem(n, l, r, u, relat=0, params=None):
             raise ValueError("relat must be 2 or 3")
         #E_init = params.get("E_init", -3000)
         E_init = params.get("E_init", -1)
-        c = params.get("c", 137.035999037)
         # Polynomial degree for predictor-corrector:
         np = params.get("np", 4)
         E, R = rdirac(c, n, l, k, np, r, u, E_init)
+        if abs(E) > 1e6:
+            raise ConvergeError("Elk solver didn't converge")
         return E, R
     else:
         raise Exception("Uknown solver")
@@ -218,9 +227,13 @@ def solve_hydrogen_like_atom(Z, mesh_params, solver_params):
 
             for relat in relat_list:
                 spin_up = (relat == 2)
-                E, R = solve_radial_eigenproblem(n, l, r, vr, relat,
-                        solver_params)
-                E_exact = E_nl_dirac(n, l, spin_up=spin_up, Z=Z, c=c)
+                try:
+                    E, R = solve_radial_eigenproblem(n, l, r, vr, relat,
+                            solver_params)
+                except ConvergeError:
+                    print "Radial solver didn't converge"
+                    return 1e6
+                E_exact = E_nl_dirac(n, l, spin_up=spin_up, Z=Z, c=c).n()
                 delta = abs(E-E_exact)
                 if delta > tot_error:
                     tot_error = delta

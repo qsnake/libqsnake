@@ -294,3 +294,17 @@ def mesh_elk_direct(sprmin, rmt, sprmax, nrmt, lradstp=4):
     r = sprmin * exp(n*t1*t2)
 
     return r
+
+def optimize_parameter(f, t):
+    from scipy.optimize import fmin
+    a0, a_min, a_max = t
+    assert a_max == None
+
+    def _f(a):
+        assert len(a) == 1
+        a = a[0]
+        a = a_min + math.exp(a)
+        return f(a)
+
+    a0 = math.log(a0-a_min)
+    return fmin(_f, a0)
