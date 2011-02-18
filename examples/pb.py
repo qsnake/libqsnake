@@ -1,5 +1,5 @@
 from qsnake.atom import solve_hydrogen_like_atom
-from qsnake.mesh import optimize_parameter
+from qsnake.mesh import n_minimize
 
 def f(a):
     r = solve_hydrogen_like_atom(82, {
@@ -11,7 +11,8 @@ def f(a):
             "solver": "dftatom",
         })
     return r
-optimize_parameter(f, (20000, 1, None))
+#optimize_parameter(f, (1620246.055619, 1, None))
+n_minimize(f, (20000, 1, None), method="simplex")
 stop
 
 solve_hydrogen_like_atom(82, {
