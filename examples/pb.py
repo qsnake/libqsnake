@@ -9,10 +9,10 @@ def f(a):
             "N": 2000,
         }, {
             "solver": "dftatom",
-        })
+        }, verbose=False)
     return r
-#optimize_parameter(f, (1620246.055619, 1, None))
-n_minimize(f, (20000, 1, None), method="simplex")
+#n_minimize(f, (1620246.055619, 1, None), method="simplex")
+n_minimize(f, (1618205.360366, 1, 2000000), method="brent")
 stop
 
 solve_hydrogen_like_atom(82, {

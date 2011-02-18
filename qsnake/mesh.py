@@ -298,17 +298,17 @@ def mesh_elk_direct(sprmin, rmt, sprmax, nrmt, lradstp=4):
     return r
 
 def n_minimize(f, t, method="automatic"):
-    from scipy.optimize import fmin, fmin_l_bfgs_b
+    from scipy.optimize import fmin, fmin_l_bfgs_b, fminbound
     a0, a_min, a_max = t
-    assert a_max == None
 
     _minimum = [None]
     if method == "automatic":
         method = "simplex"
 
     def _f(a):
-        assert len(a) == 1
-        a = a[0]
+        if method in ["simplex", "l-bfgs-b"]:
+            assert len(a) == 1
+            a = a[0]
         sys.stdout.write(".")
         sys.stdout.flush()
         if method == "simplex":
@@ -329,5 +329,9 @@ def n_minimize(f, t, method="automatic"):
     elif method == "l-bfgs-b":
         return fmin_l_bfgs_b(_f, [a0], bounds=[(a_min, a_max)],
                 approx_grad=True)
+    elif method == "brent":
+        if a_max is None:
+            a_max = 1e12
+        return fminbound(_f, a_min, a_max)
     else:
         raise ValueError("Unknown method")
