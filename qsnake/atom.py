@@ -234,6 +234,7 @@ def solve_hydrogen_like_atom(Z, mesh_params, solver_params, verbose=False):
                 except ConvergeError:
                     if verbose:
                         print "Radial solver didn't converge"
+                    raise
                     return 1e6
                 E_exact = E_nl_dirac(n, l, spin_up=spin_up, Z=Z, c=c).n()
                 delta = abs(E-E_exact)
