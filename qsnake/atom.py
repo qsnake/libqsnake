@@ -155,6 +155,8 @@ def solve_radial_eigenproblem(n, l, r, u, relat=0, params=None):
         if "Z" in params:
             Z = params["Z"]
         else:
+            # Disable the fragile estimation of Z below for now:
+            raise NotImplementedError()
             # Estimate Z by assuming a coulombic potential u = -Z/r near the
             # origin:
             Z = -u[0] * r[0]
@@ -178,8 +180,7 @@ def solve_radial_eigenproblem(n, l, r, u, relat=0, params=None):
         c = params.get("c", 137.035999037)
         # Polynomial degree for predictor-corrector:
         np = params.get("np", 4)
-        E, g, f = rdirac(c, n, l, k, np, r, u, E_init)
-        R = numpy.sqrt(g**2 + f**2)
+        E, R = rdirac(c, n, l, k, np, r, u, E_init)
         return E, R
     else:
         raise Exception("Uknown solver")
