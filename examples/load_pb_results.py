@@ -10,8 +10,9 @@ a_min = array([r["a_min"] for r in data])
 a = array([r["a"] for r in data])
 a_max = array([r["a_max"] for r in data])
 
-print max(error)
-print min(error)
+i = error.argmin()
+print r_min[i], error[i], a[i]
+
 d = array([r_min, error, a_min, a, a_max])
 savetxt("data.txt", d)
 
