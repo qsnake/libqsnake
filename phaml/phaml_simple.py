@@ -6,7 +6,7 @@ import os
 from numpy import array
 
 from phaml import Phaml
-from femhub import Mesh, Solution
+from qsnake.mesh2d import Mesh, Solution
 
 # This function is not used anywhere yet
 def get_solution_points(polygons, orders):
@@ -32,7 +32,7 @@ def run(problem_number=1, params={}):
 
     Examples:
 
-    >>> from femhub.examples.phaml_simple import run
+    >>> from qsnake.examples.phaml_simple import run
     >>> import phaml
     >>> run(1, params = {
             "term_energy_err": 1e-6,
