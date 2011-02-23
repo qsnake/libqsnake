@@ -9,6 +9,7 @@ setup(
         'qsnake',
         'qsnake.calculators',
         'qsnake.data',
+        'qsnake.mesh2d',
         'qsnake.tests',
         ],
     description = "Qsnake standard library",
