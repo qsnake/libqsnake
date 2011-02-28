@@ -1,33 +1,26 @@
-from ase import Atoms, Atom
+from ase import Atoms
 from gpaw import GPAW
 
-a = 8.  # Size of unit cell (Angstrom)
-c = a / 2
-# Hydrogen atom:
-atom = Atoms('Na',
-             positions=[(c, c, c)],
-             magmoms=[1],
-             cell=(a, a, a))
+# Sodium dimer, Na2
+d = 1.5
+atoms = Atoms(symbols='Na2',
+              positions=[( 0, 0, d),
+                         ( 0, 0,-d)],
+              pbc=False)
 
-# gpaw calculator:
-calc = GPAW(h=0.18, nbands=1, xc='PBE', txt='Na.out')
-atom.set_calculator(calc)
+atoms.center(vacuum=4.0) # For real calculations use larger vacuum (e.g. 6)
 
-e1 = atom.get_potential_energy()
-calc.write('Na.gpw')
+calc = GPAW(nbands=1,
+            h=0.35,
+            txt='Na2_gs.txt')
 
-# Hydrogen molecule:
-d = 1.5  # Experimental bond length
-molecule = Atoms('Na2',
-                 positions=([c - d / 2, c, c],
-                            [c + d / 2, c, c]),
-                 cell=(a, a, a))
+atoms.set_calculator(calc)
+e = atoms.get_potential_energy()
 
-calc.set(txt='Na2.out')
-molecule.set_calculator(calc)
-e2 = molecule.get_potential_energy()
-calc.write('Na2.gpw')
-
-print 'Na atom energy:     %5.2f eV' % e1
-print 'Na2 molecule energy: %5.2f eV' % e2
-print 'atomization energy:       %5.2f eV' % (2 * e1 - e2)
+# Calculate also unoccupied states with the fixed density
+calc.set(nbands=20, convergence={'bands': 20}, 
+         eigensolver='cg', # unoccupied states converge often better with cg
+         fixdensity=True)
+e = atoms.get_potential_energy()
+# write the wave functions to a file
+calc.write('na2_gs_unocc.gpw', 'all')
