@@ -21,3 +21,5 @@ print
 print 'PBE energy minimum:'
 print 'hydrogen molecule energy: %5.2f eV' % e2
 print 'bondlength              : %5.2f Ang' % d0
+
+calc.write("H2_gs.gpw")
