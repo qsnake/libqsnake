@@ -72,3 +72,13 @@ def run(problem_number=1, params={}):
     # Return it to the user, so that he/she can decide what to do with it. To
     # plot it, just do sol.plot().
     return sol
+
+r = run()
+x_plot, y_plot, elems_plot, values_plot = r._plot_data
+assert x_plot.shape == (5642,)
+assert y_plot.shape == (5642,)
+assert elems_plot.shape == (6117, 3)
+assert values_plot.shape == (5642,)
+calculated = values_plot[-5:-1]
+v = array([0.03087471, 0.02824911, 0.02824855, 0.02582563])
+assert (abs(v-calculated) < 1e-5).all()
