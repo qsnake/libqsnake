@@ -8,6 +8,7 @@ setup(
     packages = [
         'qsnake',
         'qsnake.calculators',
+        'qsnake.calculators.tests',
         'qsnake.data',
         'qsnake.mesh2d',
         'qsnake.tests',
