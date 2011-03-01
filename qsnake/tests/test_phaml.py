@@ -57,7 +57,9 @@ def run(problem_number=1, params={}):
     return sol
 
 def test_run1():
-    r = run()
+    r = run(params={
+        "verbose": False,
+        })
     x_plot, y_plot, elems_plot, values_plot = r._plot_data
     assert x_plot.shape == (5642,)
     assert y_plot.shape == (5642,)
