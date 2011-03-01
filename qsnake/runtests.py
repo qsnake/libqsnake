@@ -219,8 +219,7 @@ class SymPyTests(object):
         Returns the root sympy directory.
         """
         this_file = os.path.abspath(__file__)
-        #sympy_dir = os.path.join(os.path.dirname(this_file), "..", "..")
-        sympy_dir = os.path.dirname(this_file)
+        sympy_dir = os.path.join(os.path.dirname(this_file), "..")
         sympy_dir = os.path.normpath(sympy_dir)
         return sympy_dir
 
