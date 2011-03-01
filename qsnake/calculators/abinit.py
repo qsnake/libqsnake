@@ -39,6 +39,8 @@ class Abinit(object):
         """
         It tries to setup ._sage_path if it's None using "sage -root".
         """
+        self._sage_path = ""
+        # This has to be reworked to work with Qsnake:
         if self._sage_path is None:
             path = Popen(["sage", "-root"], stdout=PIPE).communicate()[0]
             path = path.strip()
