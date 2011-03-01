@@ -36,7 +36,7 @@ def run(problem_number=1, params={}):
 
     """
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    domain_file = os.path.join(current_dir, "data", "domain")
+    domain_file = os.path.join(current_dir, "phaml_data", "domain")
     p = Phaml(domain_file, problem_number)
     p.solve(params)
     x, y, elems, orders = p.get_mesh()

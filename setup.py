@@ -13,6 +13,9 @@ setup(
         'qsnake.mesh2d',
         'qsnake.tests',
         ],
+    package_data = {
+        'qsnake.tests': ['phaml_data/domain.*'],
+        },
     description = "Qsnake standard library",
     license = "BSD",
 )
