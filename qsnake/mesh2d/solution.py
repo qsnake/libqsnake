@@ -109,7 +109,7 @@ class Solution(object):
             x_fine.extend(new_x_list)
             y_fine.extend(new_y_list)
             elems_fine.extend(new_elems)
-        return array(x_fine), array(y_fine), elems_fine
+        return array(x_fine), array(y_fine), array(elems_fine)
 
     
     # This splits a triangular element into (p+1)*(p+2)/2 smaller elements. 
