@@ -9,4 +9,5 @@ fi
 
 set -e
 
+export LDFLAGS="${LDFLAGS} -shared"
 python setup.py install
