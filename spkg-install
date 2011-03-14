@@ -9,5 +9,6 @@ fi
 
 set -e
 
-export LDFLAGS="${LDFLAGS} -shared"
-python setup.py install
+cmake -DCMAKE_INSTALL_PREFIX="$SPKG_LOCAL" .
+make
+make install
