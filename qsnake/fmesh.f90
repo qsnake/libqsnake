@@ -32,7 +32,7 @@ else if (N == 1) then
 else
     stop "mesh_log() requires N >= 1"
 endif
-call mesh_exp(r_min, r_max, a, N, mesh)
+call mesh_exp(r_min, r_max, a_new, N, mesh)
 end subroutine
 
 subroutine mesh_exp(r_min, r_max, a, N, mesh)
