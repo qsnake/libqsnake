@@ -24,11 +24,14 @@ setup(
     package_data = {
         'qsnake.tests': ['phaml_data/domain.*'],
         },
+    libraries = [('foo', {
+        "sources": ["qsnake/fmesh.f90"]
+        })],
     include_dirs=[numpy.get_include()],
-    #    ext_modules = [Extension("qsnake.cmesh", [
-    #    "qsnake/cmesh.pyx",
-    #    #"qsnake/fmesh.f90",
-    #    ])],
+    ext_modules = [Extension("qsnake.cmesh",
+        sources=[
+                "qsnake/cmesh.c",
+        ], libraries=['foo'])],
     description = "Qsnake standard library",
     license = "BSD",
 )
