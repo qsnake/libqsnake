@@ -1,6 +1,7 @@
-module fmesh
+module fmesh_wrapper
 
 use iso_c_binding
+use fmesh
 
 implicit none
 
