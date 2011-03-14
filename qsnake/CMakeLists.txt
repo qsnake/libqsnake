@@ -12,4 +12,5 @@ install(FILES __init__.py atom.py runtests.py mesh.py atoms.py
     )
 
 add_subdirectory(data)
+add_subdirectory(mesh2d)
 add_subdirectory(tests)
