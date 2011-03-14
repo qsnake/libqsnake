@@ -13,15 +13,18 @@ real(dp), intent(in) :: a
 integer, intent(in) :: N
 real(dp), intent(out) :: mesh(N+1)
 
-real(dp) :: a_new
+integer :: i
 if (N > 1) then
-    a_new = a**(N/(N-1.0_dp))
+    do i = 0, N
+        mesh(i+1) = (exp(i*log(a)/(N-1.0_dp)) - 1) / (a - 1)  &
+            * (r_max - r_min) + r_min
+    enddo
 else if (N == 1) then
-    a_new = a
+    mesh(1) = r_min
+    mesh(2) = r_max
 else
     stop "mesh_log() requires N >= 1"
 endif
-call mesh_exp(r_min, r_max, a_new, N, mesh)
 end subroutine
 
 subroutine mesh_exp(r_min, r_max, a, N, mesh)
