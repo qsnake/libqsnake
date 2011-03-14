@@ -7,8 +7,9 @@ install(TARGETS cmesh
             ARCHIVE DESTINATION ${PY_PATH}
             LIBRARY DESTINATION ${PY_PATH}
         )
-install(FILES __init__.py atom.py runtests.py
+install(FILES __init__.py atom.py runtests.py mesh.py atoms.py
     DESTINATION ${PY_PATH}
     )
 
 add_subdirectory(data)
+add_subdirectory(tests)
