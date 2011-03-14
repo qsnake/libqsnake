@@ -173,7 +173,9 @@ def mesh_log(r_min=0, r_max=100, a=20, N=4):
     mesh_exp() is called with the parameter a=a**(N/(N-1.))
 
     """
-    return mesh_exp(r_min, r_max, a**(N/(N-1.)), N)
+    if N > 1:
+        a = a**(N/(N-1.))
+    return mesh_exp(r_min, r_max, a, N)
 
 def get_params_log(r):
     r_min = r[0]
