@@ -1,5 +1,5 @@
 cython_add_module_pyx(cmesh)
-add_python_library(cmesh cmesh.cpp fmesh.f90)
+add_python_library(cmesh cmesh.cpp fmesh_wrapper.f90 fmesh.f90)
 
 set(PY_PATH ${PYTHON_INSTALL_PATH}/qsnake)
 install(TARGETS cmesh
