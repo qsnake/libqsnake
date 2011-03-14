@@ -1,7 +1,6 @@
 cython_add_module_pyx(cmesh)
 add_python_library(cmesh cmesh.cpp fmesh.f90)
 
-set(PYTHON_INSTALL_PATH lib/python/site-packages)
 set(PY_PATH ${PYTHON_INSTALL_PATH}/libqsnake)
 install(TARGETS cmesh
             RUNTIME DESTINATION ${PY_PATH}
