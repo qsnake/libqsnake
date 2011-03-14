@@ -1,7 +1,7 @@
 cython_add_module_pyx(cmesh)
 add_python_library(cmesh cmesh.cpp fmesh.f90)
 
-set(PY_PATH ${PYTHON_INSTALL_PATH}/libqsnake)
+set(PY_PATH ${PYTHON_INSTALL_PATH}/qsnake)
 install(TARGETS cmesh
             RUNTIME DESTINATION ${PY_PATH}
             ARCHIVE DESTINATION ${PY_PATH}
@@ -10,3 +10,5 @@ install(TARGETS cmesh
 install(FILES __init__.py atom.py runtests.py
     DESTINATION ${PY_PATH}
     )
+
+add_subdirectory(data)
