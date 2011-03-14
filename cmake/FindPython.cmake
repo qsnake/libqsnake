@@ -8,7 +8,7 @@ FIND_PATH(PYTHON_INCLUDE_PATH Python.h
     NO_DEFAULT_PATH
     NO_SYSTEM_ENVIRONMENT_PATH
     )
-	
+
 execute_process(
 	COMMAND python -c "from distutils.sysconfig import get_config_var; print get_config_var('LIBDIR')"
 	OUTPUT_VARIABLE PYTHON_LIB_PATH
@@ -20,15 +20,15 @@ FIND_LIBRARY(PYTHON_LIBRARY NAMES python2.6
     NO_SYSTEM_ENVIRONMENT_PATH
     )
 
-# For MSVC (on Win, the function get_config_var does not accept the parameter 'LIBDIR').
-IF(MSVC)	
-	IF(PYTHON_ROOT)
-		FIND_LIBRARY(PYTHON_LIBRARY NAMES python26_d python27_d PATHS ${PYTHON_ROOT}/lib)
-	ENDIF(PYTHON_ROOT)
-ENDIF(MSVC)
+execute_process(
+	COMMAND python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"
+	OUTPUT_VARIABLE PYTHON_INSTALL_PATH
+	)
+string(STRIP ${PYTHON_INSTALL_PATH} PYTHON_INSTALL_PATH)
+message(STATUS "Python install path: ${PYTHON_INSTALL_PATH}")
 
 INCLUDE(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(PYTHON DEFAULT_MSG PYTHON_LIBRARY PYTHON_INCLUDE_PATH)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(PYTHON DEFAULT_MSG PYTHON_LIBRARY PYTHON_INCLUDE_PATH PYTHON_INSTALL_PATH)
 
 
 # Links a Python extension module.
