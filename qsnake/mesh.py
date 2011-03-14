@@ -55,9 +55,6 @@ import numpy
 
 import cmesh
 
-def ref2phys(r, r_min, r_max):
-    return r * (r_max - r_min) + r_min
-
 def mesh_exp(r_min, r_max, a, N):
     """
     Calculates the exponential mesh using a robust formula.
@@ -96,6 +93,10 @@ def mesh_hyp(r_min, r_max, a, N):
     exp = numpy.exp
     log = math.log
     r = n * (a - 1) / (a*N - n)
+
+    def ref2phys(r, r_min, r_max):
+        return r * (r_max - r_min) + r_min
+
     return ref2phys(r, r_min, r_max)
 
 def mesh_hyperbolic(ap, jm, N):
