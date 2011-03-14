@@ -1,6 +1,6 @@
 from numpy import array
 
-from qsnake.cmesh import mesh_log
+from qsnake.mesh import mesh_log
 
 eps = 1e-10
 

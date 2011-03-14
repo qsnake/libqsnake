@@ -53,6 +53,8 @@ import math
 from numpy import array, arange
 import numpy
 
+import cmesh
+
 def ref2phys(r, r_min, r_max):
     return r * (r_max - r_min) + r_min
 
@@ -74,11 +76,7 @@ def mesh_exp(r_min, r_max, a, N):
     a = float(a)
     assert a > 1
     assert N >= 1
-    n = arange(N+1)
-    exp = numpy.exp
-    log = math.log
-    r = (exp(n*log(a)/N) - 1) / (a - 1)
-    return ref2phys(r, r_min, r_max)
+    return cmesh.mesh_exp(r_min, r_max, a, N)
 
 def mesh_hyp(r_min, r_max, a, N):
     """
