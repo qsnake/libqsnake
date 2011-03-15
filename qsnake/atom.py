@@ -195,7 +195,7 @@ def solve_radial_eigenproblem(n, l, r, u, relat=0, params=None):
         raise Exception("Uknown solver")
 
 def solve_hydrogen_like_atom(Z, mesh_params, solver_params, verbose=False):
-    from sympy.physics.hydrogen import E_nl_dirac
+    from sympy.physics.hydrogen import E_nl_dirac, E_nl
     from sympy import TableForm
     r_min = mesh_params["r_min"]
     r_max = mesh_params["r_max"]
@@ -211,6 +211,7 @@ def solve_hydrogen_like_atom(Z, mesh_params, solver_params, verbose=False):
     c = solver_params.get("c", 137.035999037)
     solver_params["c"] = c
     solver_params["Z"] = Z
+    dirac = solver_params.get("dirac", False)
 
 
     # Potential:
@@ -222,12 +223,14 @@ def solve_hydrogen_like_atom(Z, mesh_params, solver_params, verbose=False):
     # either k == l, or k == l + 1:
     for n in range(1, 7):
         for l in range(0, n):
-            relat_list = [2]
-            if l > 0:
-                relat_list.append(3)
+            if dirac:
+                relat_list = [2]
+                if l > 0:
+                    relat_list.append(3)
+            else:
+                relat_list = [0]
 
             for relat in relat_list:
-                spin_up = (relat == 2)
                 try:
                     E, R = solve_radial_eigenproblem(n, l, r, vr, relat,
                             solver_params)
@@ -236,12 +239,19 @@ def solve_hydrogen_like_atom(Z, mesh_params, solver_params, verbose=False):
                         print "Radial solver didn't converge"
                     raise
                     return 1e6
-                E_exact = E_nl_dirac(n, l, spin_up=spin_up, Z=Z, c=c)
+                if dirac:
+                    spin_up = (relat == 2)
+                    E_exact = E_nl_dirac(n, l, spin_up=spin_up, Z=Z, c=c)
+                else:
+                    E_exact = E_nl(n, Z=Z)
                 E_exact = float(E_exact)
                 delta = abs(E-E_exact)
                 if delta > tot_error:
                     tot_error = delta
-                k = int(spin_up)
+                if dirac:
+                    k = int(spin_up)
+                else:
+                    k = 0
                 data.append([n, l, k,
                     "%.6f" % E, "%.6f" % E_exact, "%.2e" % delta])
     t = TableForm(data, alignment="right",
