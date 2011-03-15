@@ -40,7 +40,7 @@ Basic types of meshes:
 Derived meshes (parameters are first converted and then one of the above
 functions is called):
 
-    mesh_log()
+    mesh_exp2()
     mesh_hyperbolic()
     mesh_nist1(), mesh_nist1_direct()
     mesh_nist2(), mesh_nist2_direct()
@@ -53,27 +53,22 @@ import math
 from numpy import array, arange
 import numpy
 
-import cmesh
+from cmesh import mesh_exp
 
-def mesh_exp(r_min, r_max, a, N):
+def mesh_exp2(r_min, r_max, a, N):
     """
     Calculates the exponential mesh using a robust formula.
 
     r_n = (a**(n/N) - 1) / (a - 1)
 
-    with a > 1.
-
-    The a**(n/N) is written as exp(n*log(a)/N), so that we can use the exp()
-    function, which is very fast and robust.
-
-    The advantage of this method is that the formula is very simple, and all
-    the other forms can be easily converted to/from it.
+    with a > 1. By substitution a -> a**((N-1.)/N), we can just call
+    mesh_exp().
 
     """
     a = float(a)
     assert a > 1
     assert N >= 1
-    return cmesh.mesh_exp(r_min, r_max, a**((N-1.)/N), N)
+    return mesh_exp(r_min, r_max, a**((N-1.)/N), N)
 
 def mesh_hyp(r_min, r_max, a, N):
     """
@@ -155,7 +150,7 @@ def mesh_log(r_min=0, r_max=100, a=20, N=4):
 
         r_n = (a**(n/(N-1)) - 1) / (a**(N/(N-1)) - 1)
 
-    which can be obtain from the mesh_exp() formula by using::
+    which can be obtain from the mesh_exp2() formula by using::
 
         a -> a ** (N/(N-1))
 
@@ -168,11 +163,10 @@ def mesh_log(r_min=0, r_max=100, a=20, N=4):
 
     The advantage of this formula is that the meaning of "a" is very physical.
     From any exponential mesh, one can quickly calculate "a" by simply taking
-    the fraction of the largest/smallest element in the mesh. Internally, the
-    mesh_exp() is called with the parameter a=a**(N/(N-1.))
+    the fraction of the largest/smallest element in the mesh.
 
     """
-    return cmesh.mesh_exp(r_min, r_max, a, N)
+    return mesh_exp(r_min, r_max, a, N)
 
 def get_params_log(r):
     r_min = r[0]
@@ -189,7 +183,7 @@ def mesh_nist1(r_min, r_max, N):
 
     r_n_phys = r_min * (r_max/r_min)**(n/N)
 
-    which is obtained from mesh_exp() by substituting a = r_max / r_min.
+    which is obtained from mesh_exp2() by substituting a = r_max / r_min.
 
     """
     r_min = float(r_min)
@@ -197,7 +191,7 @@ def mesh_nist1(r_min, r_max, N):
     assert r_max > r_min
     assert r_min > 0
     a = r_max / r_min
-    return mesh_exp(r_min, r_max, a, N)
+    return mesh_exp2(r_min, r_max, a, N)
 
 def mesh_nist1_direct(r_min, r_max, N):
     """
@@ -228,7 +222,7 @@ def mesh_nist2(a, b, N):
 
     for n = 0, 1, ..., N.
 
-    This formula is obtained from mesh_exp(r_min, r_max, a, N) by a
+    This formula is obtained from mesh_exp2(r_min, r_max, a, N) by a
     substituation:
 
     r_min = 0
@@ -236,7 +230,7 @@ def mesh_nist2(a, b, N):
     a = exp(b*N)
 
     In other words, by choosing the parameters "a, b, N", the domain is set to
-    [0, a * (exp(b*N) - 1)] and the parameter "a" in mesh_exp() (don't confuse
+    [0, a * (exp(b*N) - 1)] and the parameter "a" in mesh_exp2() (don't confuse
     it with a parameter of this function of the same name) is set to
     a=exp(b*N).
 
@@ -244,7 +238,7 @@ def mesh_nist2(a, b, N):
     exp = math.exp
     r_min = 0
     r_max = a * (exp(b*N) - 1)
-    return mesh_exp(r_min, r_max, exp(b*N), N)
+    return mesh_exp2(r_min, r_max, exp(b*N), N)
 
 def mesh_nist2_direct(a, b, N):
     """
