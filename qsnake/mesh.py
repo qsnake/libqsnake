@@ -73,7 +73,7 @@ def mesh_exp(r_min, r_max, a, N):
     a = float(a)
     assert a > 1
     assert N >= 1
-    return cmesh.mesh_exp(r_min, r_max, a, N)
+    return cmesh.mesh_exp(r_min, r_max, a**((N-1.)/N), N)
 
 def mesh_hyp(r_min, r_max, a, N):
     """
@@ -172,7 +172,7 @@ def mesh_log(r_min=0, r_max=100, a=20, N=4):
     mesh_exp() is called with the parameter a=a**(N/(N-1.))
 
     """
-    return cmesh.mesh_log(r_min, r_max, a, N)
+    return cmesh.mesh_exp(r_min, r_max, a, N)
 
 def get_params_log(r):
     r_min = r[0]
