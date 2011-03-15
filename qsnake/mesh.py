@@ -133,7 +133,13 @@ def mesh_hyperbolic_direct(ap, jm, N):
     jm = float(jm)
     return ap * n / (jm - n)
 
-def get_params_log(r):
+def get_params_exp(r):
+    """
+    Obtains the mesh parameters from a given mesh "r".
+
+    This assumes that the mesh "r" is exponential. Only the first two and the
+    last two point values are used (and the length of the array "r").
+    """
     r_min = r[0]
     r_max = r[-1]
     a = (r[-1] - r[-2]) / (r[1] - r[0])
