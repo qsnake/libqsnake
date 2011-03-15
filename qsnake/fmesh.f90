@@ -14,10 +14,11 @@ integer, intent(in) :: N
 real(dp), intent(out) :: mesh(N+1)
 
 integer :: i
+real(dp) :: C
 if (N > 1) then
+    C = (r_max - r_min) / (a**(N/(N-1.0_dp)) - 1)
     do i = 0, N
-        mesh(i+1) = (exp(i*log(a)/(N-1.0_dp)) - 1) / (a - 1)  &
-            * (r_max - r_min) + r_min
+        mesh(i+1) = (exp(i*log(a)/(N-1.0_dp)) - 1) * C + r_min
     enddo
 else if (N == 1) then
     mesh(1) = r_min
