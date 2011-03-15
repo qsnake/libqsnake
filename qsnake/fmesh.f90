@@ -20,9 +20,9 @@ integer :: i
 real(dp) :: alpha, beta
 if (N > 1) then
     beta = log(a)/(N-1)
-    alpha = (r_max - r_min) / (exp(N*beta) - 1)
-    do i = 0, N
-        mesh(i+1) = alpha * (exp(i*beta) - 1) + r_min
+    alpha = (r_max - r_min) / (exp(beta*N) - 1)
+    do i = 1, N+1
+        mesh(i) = alpha * (exp(beta*(i-1)) - 1) + r_min
     enddo
 else if (N == 1) then
     mesh(1) = r_min
