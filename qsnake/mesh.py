@@ -134,38 +134,6 @@ def mesh_hyperbolic_direct(ap, jm, N):
     return ap * n / (jm - n)
 
 def mesh_log(r_min=0, r_max=100, a=20, N=4):
-    """
-    Creates a logarithmic mesh.
-
-    Example::
-
-    >>> mesh_log(0, 100, a=20, N=4)
-    array([   0.        ,    3.21724644,   11.95019684,   35.65507127,  100.        ])
-    >>> mesh_log(0, 100, a=40, N=4)
-    array([   0.        ,    1.78202223,    7.87645252,   28.71911092,  100.        ])
-    >>> mesh_log(0, 100, a=100, N=4)
-    array([   0.        ,    0.78625046,    4.43570179,   21.37495437,  100.        ])
-
-    Here:
-
-        r_n = (a**(n/(N-1)) - 1) / (a**(N/(N-1)) - 1)
-
-    which can be obtain from the mesh_exp2() formula by using::
-
-        a -> a ** (N/(N-1))
-
-    The meaning of the parameter "a" is the ratio of lenghts of the last and
-    first elements. I.e.::
-
-        a = (r_N - r_(N-1)) / (r_1 - r_0)
-
-    as can be checked by easy calculation.
-
-    The advantage of this formula is that the meaning of "a" is very physical.
-    From any exponential mesh, one can quickly calculate "a" by simply taking
-    the fraction of the largest/smallest element in the mesh.
-
-    """
     return mesh_exp(r_min, r_max, a, N)
 
 def get_params_log(r):
