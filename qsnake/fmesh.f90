@@ -18,7 +18,7 @@ real(dp) :: C
 if (N > 1) then
     C = (r_max - r_min) / (a**(N/(N-1.0_dp)) - 1)
     do i = 0, N
-        mesh(i+1) = (exp(i*log(a)/(N-1.0_dp)) - 1) * C + r_min
+        mesh(i+1) = (exp(i*log(a)/(N-1)) - 1) * C + r_min
     enddo
 else if (N == 1) then
     mesh(1) = r_min
