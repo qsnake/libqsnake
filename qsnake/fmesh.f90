@@ -28,7 +28,7 @@ else if (N == 1) then
     mesh(1) = r_min
     mesh(2) = r_max
 else
-    stop "mesh_log() requires N >= 1"
+    stop "mesh_exp() requires N >= 1"
 endif
 end subroutine
 
