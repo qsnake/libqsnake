@@ -17,11 +17,12 @@ integer, intent(in) :: N
 real(dp), intent(out) :: mesh(N+1)
 
 integer :: i
-real(dp) :: C
+real(dp) :: alpha, beta
 if (N > 1) then
-    C = (r_max - r_min) / (a**(N/(N-1.0_dp)) - 1)
+    beta = log(a)/(N-1)
+    alpha = (r_max - r_min) / (exp(N*beta) - 1)
     do i = 0, N
-        mesh(i+1) = (exp(i*log(a)/(N-1)) - 1) * C + r_min
+        mesh(i+1) = alpha * (exp(i*beta) - 1) + r_min
     enddo
 else if (N == 1) then
     mesh(1) = r_min
