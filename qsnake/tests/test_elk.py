@@ -1,13 +1,13 @@
 from sympy.physics.hydrogen import E_nl_dirac
 
 from elk.pyelk import rdirac
-from qsnake.mesh import mesh_log
+from qsnake.mesh import mesh_exp
 
 def f(a):
     # Mesh:
     #r = create_hyperbolic_grid(rmin=5e-8, rmax=20, k0=30000)
     #r = create_log_mesh(a=1e-5, b=100, par=10000, n_elem=10000)
-    r = mesh_log(r_min=1e-8, r_max=50, a=a, N=1000)
+    r = mesh_exp(r_min=1e-8, r_max=50, a=a, N=1000)
 
     Z = 82
 

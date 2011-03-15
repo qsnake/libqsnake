@@ -2,7 +2,7 @@ from math import sin, cos, pi
 from numpy import array, dot, cross
 from numpy.linalg import norm
 from data import symbol2number, number2symbol, number2name, number2color
-from mesh import mesh_log
+from mesh import mesh_exp
 import numpy
 
 class ConvergeError(Exception):
@@ -201,7 +201,7 @@ def solve_hydrogen_like_atom(Z, mesh_params, solver_params, verbose=False):
     r_max = mesh_params["r_max"]
     a = mesh_params["a"]
     N = mesh_params["N"]
-    r = mesh_log(r_min, r_max, a, N)
+    r = mesh_exp(r_min, r_max, a, N)
     if verbose:
         print "Mesh parameters:"
         print TableForm([[r_min], [r_max], [a], [N]],

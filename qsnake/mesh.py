@@ -133,9 +133,6 @@ def mesh_hyperbolic_direct(ap, jm, N):
     jm = float(jm)
     return ap * n / (jm - n)
 
-def mesh_log(r_min=0, r_max=100, a=20, N=4):
-    return mesh_exp(r_min, r_max, a, N)
-
 def get_params_log(r):
     r_min = r[0]
     r_max = r[-1]
