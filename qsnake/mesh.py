@@ -225,8 +225,20 @@ def mesh_nist2_direct(a, b, N):
     """
     exp = numpy.exp
     n = arange(N+1)
-    r = a * (exp(b*n) - 1)
-    return r[1:]
+    r = a * (exp(b*(n-1)) - 1)
+    return r[2:]
+
+def mesh_nist3_direct(r_min, r_max, N):
+    """
+    Calculates the NIST III mesh directly.
+
+    """
+    exp = numpy.exp
+    log = math.log
+    # Uniform mesh in rho:
+    rho = mesh_exp(log(r_min), log(r_max), a=1, N=N)
+    r = exp(rho)
+    return r
 
 def mesh_elk_direct(sprmin, rmt, sprmax, nrmt, lradstp=4):
     """
