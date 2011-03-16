@@ -225,7 +225,8 @@ def mesh_nist2_direct(a, b, N):
     """
     exp = numpy.exp
     n = arange(N+1)
-    return a * (exp(b*n) - 1)
+    r = a * (exp(b*n) - 1)
+    return r[1:]
 
 def mesh_elk_direct(sprmin, rmt, sprmax, nrmt, lradstp=4):
     """
