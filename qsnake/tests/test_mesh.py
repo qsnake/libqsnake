@@ -1,6 +1,6 @@
 from numpy import array
 
-from qsnake.mesh import mesh_exp
+from qsnake.mesh import mesh_exp, get_mesh_exp_params
 
 def test_mesh_exp1():
     eps = 1e-10
@@ -25,6 +25,11 @@ def test_mesh_exp4():
     r = mesh_exp(0, 10, 2, 50)
     a = (r[-1] - r[-2]) / (r[1] - r[0])
     assert abs(a - 2) < eps
+    r_min, r_max, a, N = get_mesh_exp_params(r)
+    assert abs(r_min - 0) < eps
+    assert abs(r_max - 10) < eps
+    assert abs(a - 2) < eps
+    assert N == 50
 
     r = mesh_exp(0, 10, 3, 50)
     a = (r[-1] - r[-2]) / (r[1] - r[0])
@@ -49,6 +54,11 @@ def test_mesh_exp4():
     r = mesh_exp(0, 10, 0.1, 50)
     a = (r[-1] - r[-2]) / (r[1] - r[0])
     assert abs(a - 0.1) < eps
+    r_min, r_max, a, N = get_mesh_exp_params(r)
+    assert abs(r_min - 0) < eps
+    assert abs(r_max - 10) < eps
+    assert abs(a - 0.1) < eps
+    assert N == 50
 
 def test_mesh_exp5():
     eps = 1e-8
@@ -63,3 +73,19 @@ def test_mesh_exp5():
     r = mesh_exp(0, 100, a=100, N=4)
     correct = array([0. , 0.78625046, 4.43570179, 21.37495437, 100.])
     assert (abs(r-correct) < eps).all()
+
+def test_mesh_exp6():
+    eps = 1e-10
+    r = mesh_exp(1e-7, 50, 21.37, 700)
+    r_min, r_max, a, N = get_mesh_exp_params(r)
+    assert abs(r_min - 1e-7) < eps
+    assert abs(r_max - 50) < eps
+    assert abs(a - 21.37) < eps
+    assert N == 700
+
+    r = mesh_exp(1, 50, 21.37, 700)
+    r_min, r_max, a, N = get_mesh_exp_params(r)
+    assert abs(r_min - 1) < eps
+    assert abs(r_max - 50) < eps
+    assert abs(a - 21.37) < eps
+    assert N == 700

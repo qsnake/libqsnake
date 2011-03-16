@@ -57,7 +57,7 @@ from cmesh import mesh_exp
 
 def mesh_exp2(r_min, r_max, a, N):
     """
-    Calculates the exponential mesh using a robust formula.
+    Calculates the exponential mesh using a formula:
 
     r_n = (a**(n/N) - 1) / (a - 1)
 
@@ -133,7 +133,7 @@ def mesh_hyperbolic_direct(ap, jm, N):
     jm = float(jm)
     return ap * n / (jm - n)
 
-def get_params_exp(r):
+def get_mesh_exp_params(r):
     """
     Obtains the mesh parameters from a given mesh "r".
 
