@@ -206,7 +206,7 @@ def solve_hydrogen_like_atom(Z, mesh_params, solver_params, verbose=False):
         print "Mesh parameters:"
         print TableForm([[r_min], [r_max], [a], [N]],
                 headings=(("r_min", "r_max", "a", "N"), ("Mesh parameters",)))
-        print r
+        #print r
 
     c = solver_params.get("c", 137.035999037)
     solver_params["c"] = c
