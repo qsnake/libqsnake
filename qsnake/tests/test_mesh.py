@@ -38,6 +38,18 @@ def test_mesh_exp4():
     a = (r[-1] - r[-2]) / (r[1] - r[0])
     assert abs(a - 10.5) < eps
 
+    r = mesh_exp(0, 10, 1, 50)
+    a = (r[-1] - r[-2]) / (r[1] - r[0])
+    assert abs(a - 1) < eps
+
+    r = mesh_exp(0, 10, 0.5, 50)
+    a = (r[-1] - r[-2]) / (r[1] - r[0])
+    assert abs(a - 0.5) < eps
+
+    r = mesh_exp(0, 10, 0.1, 50)
+    a = (r[-1] - r[-2]) / (r[1] - r[0])
+    assert abs(a - 0.1) < eps
+
 def test_mesh_exp5():
     eps = 1e-8
     r = mesh_exp(0, 100, a=20, N=4)
