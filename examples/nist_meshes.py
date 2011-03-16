@@ -1,7 +1,26 @@
-from math import sqrt
+from math import sqrt, log
+from numpy import exp, arange
 
-from qsnake.mesh import (get_mesh_exp_params, mesh_exp, mesh_nist1_direct,
-        mesh_nist2_direct, mesh_nist3_direct)
+from qsnake.mesh import get_mesh_exp_params, mesh_exp
+
+def mesh_nist1_direct(r_min, r_max, N):
+    r_min = float(r_min)
+    r_max = float(r_max)
+    n = arange(N+1)
+    a = r_max / r_min
+    N = float(N)
+    return r_min * a ** (n/N)
+
+def mesh_nist2_direct(a, b, N):
+    n = arange(N+1)
+    r = a * (exp(b*(n-1)) - 1)
+    return r[2:]
+
+def mesh_nist3_direct(r_min, r_max, N):
+    # Uniform mesh in rho:
+    rho = mesh_exp(log(r_min), log(r_max), a=1, N=N)
+    r = exp(rho)
+    return r
 
 Z = 92
 eps = 1e-10
