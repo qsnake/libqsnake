@@ -12,8 +12,8 @@ subroutine mesh_exp(r_min, r_max, a, N, mesh)
 ! Input parameters:
 !     r_min, r_max .... The domain [r_min, r_max], the mesh will contain both
 !                       endpoints
-!     a ............... The fraction of the rightmost vs. leftmost elements of
-!                       the mesh (for a > 1 this means the "largest/smallest").
+!     a ............... The ratio of rightmost to leftmost mesh intervals
+!                       (for a > 1 this means the "largest/smallest").
 !                       The only requirement is a > 0. For a == 1 a uniform
 !                       mesh will be returned.
 !     N ............... The number of elements in the mesh
