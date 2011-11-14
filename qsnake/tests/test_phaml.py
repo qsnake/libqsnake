@@ -61,10 +61,10 @@ def test_run1():
         "verbose": False,
         })
     x_plot, y_plot, elems_plot, values_plot = r._plot_data
-    assert x_plot.shape == (5642,)
-    assert y_plot.shape == (5642,)
-    assert elems_plot.shape == (6117, 3)
-    assert values_plot.shape == (5642,)
+    assert x_plot.shape == (5976,)
+    assert y_plot.shape == (5976,)
+    assert elems_plot.shape == (6562, 3)
+    assert values_plot.shape == (5976,)
     calculated = values_plot[-5:-1]
-    v = array([0.03087471, 0.02824911, 0.02824855, 0.02582563])
+    v = array([0.8169857, 0.89812323, 0.88664598, 0.96778361])
     assert (abs(v-calculated) < 1e-5).all()
