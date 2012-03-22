@@ -162,6 +162,25 @@ class Atoms(object):
             s += "%s %s %s\n" % tuple(a.position)
         return s[:-1]
 
+    def get_coordinates(self):
+        """
+        Returns coordinates as a list.
+
+        >>> from qsnake import Atom
+        >>> a1 = Atom("H", (0, 0, 0))
+        >>> a2 = Atom("H", (0, 0, 1))
+        >>> a3 = Atom("O", (1, 0, 1))
+        >>> atoms = Atoms([a1, a2, a3])
+        >>> print atoms.get_coordinates()
+        [[0, 0, 0], [0, 0, 1], [1, 0, 1]]
+
+        """
+
+        s = []
+        for a in self._atoms:
+            s.append(a.position)
+        return s
+
     def get_number_of_types_of_atoms(self):
         """
         Return a number of types of atoms.
